@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-// import localFont from "next/font/local";
-// import "./globals.css";
-import { CopilotKitProvider } from "@/components/CopilotKitProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,9 +15,7 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
-        <CopilotKitProvider>
           {children}
-        </CopilotKitProvider>
       </body>
     </html>
   );
