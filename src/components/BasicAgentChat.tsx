@@ -3,13 +3,13 @@
 import * as React from 'react'
 import { useCoAgent, useCopilotChat } from "@copilotkit/react-core";
 import { TextMessage, MessageRole } from "@copilotkit/runtime-client-gql";
-// import { CopilotPopup } from "@copilotkit/react-ui";
 
 interface WeatherAgentState {
   final_response: {
     temperature: number;
     wind_direction: string;
     wind_speed: number;
+    conditions: string;
   },
   input: string,
   messages: any[]
@@ -23,28 +23,19 @@ export function BasicAgentChat() {
     });
 
   const { appendMessage, isLoading } = useCopilotChat();
-  
-  // const handleMessage = (content = '') => {
-  //   appendMessage(
-  //     new TextMessage({
-  //       role: MessageRole.User,
-  //       content,
-  //     })
-  //   );
-  // };
 
   // The form submit event should cover both hitting Enter and clicking Submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const formData = new FormData(e.target as HTMLFormElement);
-    // const message = formData.get('message_input')
-
-    // handleMessage(agentState.input);
     appendMessage(
       new TextMessage({
         role: MessageRole.User,
-        content: agentState.input,
+        content: `
+Please tell me the weather in the following location. If the input below is phrased as a question or is not recognizable as a location, and you can't make a reasonable guess as to what location I mean, ignore this prompt. The input is:
+
+${agentState.input}
+        `,
       })
     );
   }
@@ -56,9 +47,6 @@ export function BasicAgentChat() {
       input
     })
   }
-
-  // const messages = agentState.messages;
-  console.log(agentState);
 
   return (
     <div className='flex flex-col w-full max-w-lg border border-neutral-200 p-8 min-h-[50vh] '>
@@ -76,7 +64,7 @@ export function BasicAgentChat() {
         </button>
       </form>
       <div className='flex-1'>
-        {agentState.final_response && <div>{JSON.stringify(agentState.final_response, null, 1)}</div>}
+        {agentState && <div>{JSON.stringify(agentState, null, 1)}</div>}
       </div>
     </div>
   )
